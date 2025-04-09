@@ -1,4 +1,7 @@
-workspace = { members = ["saba_core"] }
+[workspace]
+members = [
+    "saba_core",
+]
 
 [package]
 name = "saba"
