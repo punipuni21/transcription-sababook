@@ -26,7 +26,7 @@ impl Url {
 
     pub fn new(url: String) -> Self {
         Self {
-            url: "".to_string(),
+            url: url,
             host: "".to_string(),
             port: "".to_string(),
             path: "".to_string(),
@@ -125,6 +125,19 @@ mod tests {
             url: url.clone(),
             host: "example.com".to_string(),
             port: "80".to_string(),
+            path: "".to_string(),
+            searchpart: "".to_string(),
+        });
+        assert_eq!(expected, Url::new(url).parse());
+    }
+
+    #[test]
+    fn test_url_host_port() {
+        let url = "http://example.com:8080".to_string();
+        let expected = Ok(Url {
+            url: url.clone(),
+            host: "example.com".to_string(),
+            port: "8080".to_string(),
             path: "".to_string(),
             searchpart: "".to_string(),
         });
