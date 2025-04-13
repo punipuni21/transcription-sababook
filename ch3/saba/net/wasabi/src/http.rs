@@ -5,6 +5,7 @@ use alloc::string::String;
 use alloc::string::ToString;
 use noli::net::lookup_host;
 use noli::net::SocketAddr;
+use noli::net::TcpStream;
 use saba_core::error::Error;
 use saba_core::http::HttpResponse;
 
@@ -29,5 +30,14 @@ impl HttpClient {
         if ips.len() < 1 {
             return Err(Error::Network("No IP address found".to_string()));
         }
+
+        let socket_addr: SocketAddr = (ips[0], port).into();
+
+        let mut stream = match TcpStream::connect(socket_addr) {
+            Ok(stream) => stream,
+            Err(_) => {
+                return Err(Error::Network("Failed to connect TCP stream".to_string()));
+            }
+        };
     }
 }
