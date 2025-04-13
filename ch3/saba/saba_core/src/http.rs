@@ -1,3 +1,5 @@
+use core::fmt::Error;
+
 use alloc::string::String;
 use alloc::vec::Vec;
 
@@ -20,4 +22,10 @@ pub struct HttpResponse {
     reason: String,
     headers: Vec<Header>,
     body: String,
+}
+
+impl HttpResponse {
+    pub fn new(raw_response: String) -> Result<Self, Error> {
+        unimplemented!()
+    }
 }
