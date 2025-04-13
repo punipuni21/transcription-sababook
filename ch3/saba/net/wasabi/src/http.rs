@@ -77,5 +77,10 @@ impl HttpClient {
             }
             recieved.extend_from_slice(&buf[..bytes_read]);
         }
+
+        match core::str::from_utf8(&recieved) {
+            Ok(response) => HttpResponse::new(response.to_string()),
+            Err(e) => Err(Error::Network(format!("Invalid reveived response: {}", e))),
+        }
     }
 }
