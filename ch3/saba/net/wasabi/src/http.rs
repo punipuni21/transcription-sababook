@@ -1,5 +1,7 @@
 extern crate alloc;
+
 use alloc::string::String;
+use noli::net::lookup_host;
 use saba_core::error::Error;
 use saba_core::http::HttpResponse;
 
