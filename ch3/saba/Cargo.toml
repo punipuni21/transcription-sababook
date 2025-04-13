@@ -1,6 +1,23 @@
+workspace = { members = ["saba_core", "net/wasabi"] }
+
 [package]
+authors = ["puni"]
 name = "saba"
 version = "0.1.0"
 edition = "2021"
+default-run = "saba"
+
+[features]
+default = ["wasabi"]
+wasabi = ["dep:net_wasabi", "dep:wasabi"]
+
+[[bin]]
+name = "saba"
+path = "src/main.rs"
+required-features = ["wasabi"]
 
 [dependencies]
+saba_core = { path = "./saba_core" }
+net_wasabi = { path = "./net/wasabi" }
+noli = { git = "https://github.com/hikalium/wasabi.git", branch = "for_saba" ,optional = true}
+
