@@ -11,6 +11,9 @@ impl HttpClient {
     }
 
     pub fn get(&self, host: String, port: u16, path: String) -> Result<HttpResponse, Error> {
-        unimplemented!()
+      let ips = match lookup_host(&"example.com") {
+        Ok(ips) => ips,
+        Err(_) => return Err(Error::Network("Failed to find IP address").to_string());
+      }
     }
 }
