@@ -1,4 +1,5 @@
-use core::fmt::Error;
+use crate::error::Error;
+use alloc::format;
 
 use alloc::string::String;
 use alloc::vec::Vec;
@@ -26,6 +27,31 @@ pub struct HttpResponse {
 
 impl HttpResponse {
     pub fn new(raw_response: String) -> Result<Self, Error> {
-        unimplemented!()
+        let preprocessed_response = raw_response.trim_start().replace("\r\n", "\n");
+
+        let (status_line, remaining) = match preprocessed_response.split_once('\n') {
+            Some((s, r)) => (s, r),
+            None => {
+                return Err(Error::Network(format!(
+                    "Invalid HTTP response: {}",
+                    preprocessed_response
+                )));
+            }
+        };
+
+        let (headers, body) = match remaining.split_once("\n\n") {
+            Some((h, b)) => {
+                let mut headers = Vec::new();
+                for header in h.split('\n') {
+                    let splitted_header: Vec<&str> = header.splitn(2, ':').collect();
+                    headers.push(Header::new(
+                        String::from(splitted_header[0].trim()),
+                        String::from(splitted_header[1].trim()),
+                    ));
+                }
+                (headers, b)
+            }
+            None => (Vec::new(), remaining),
+        };
     }
 }
