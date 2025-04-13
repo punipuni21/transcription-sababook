@@ -2,4 +2,4 @@
 
 extern crate alloc;
 
-mod url;
+pub mod url;
