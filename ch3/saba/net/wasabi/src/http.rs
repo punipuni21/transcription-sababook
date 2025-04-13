@@ -39,5 +39,9 @@ impl HttpClient {
                 return Err(Error::Network("Failed to connect TCP stream".to_string()));
             }
         };
+
+        let mut request = String::from("GET /");
+        request.push_str(&path);
+        request.push_str(" HTTP/1.1\n");
     }
 }
