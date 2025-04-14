@@ -132,4 +132,10 @@ mod tests {
         assert_eq!(res.header_value("Date"), Ok("xx xx xx".to_string()));
         assert_eq!(res.body(), "body message".to_string());
     }
+
+    #[test]
+    fn test_invalid() {
+        let raw = "HTTP/1.1 200 OK".to_string();
+        assert!(HttpResponse::new(raw).is_err());
+    }
 }
