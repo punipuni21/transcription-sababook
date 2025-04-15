@@ -1,3 +1,4 @@
+use crate::renderer::html::attribute::Attribute;
 use alloc::string::String;
 use alloc::vec::Vec;
 
@@ -22,4 +23,18 @@ impl HtmlTokenizer {
             buf: String::new(),
         }
     }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum HtmlToken {
+    StartTag {
+        tag: String,
+        self_closing: bool,
+        attributes: Vec<Attribute>,
+    },
+    EndTag {
+        tag: String,
+    },
+    Char(char),
+    Eof,
 }
