@@ -87,6 +87,8 @@ impl HtmlTokenizer {
         self.pos += 1;
         c
     }
+
+    fn create_tag(&mut self, start_tag_token: bool) {}
 }
 
 impl Iterator for HtmlTokenizer {
@@ -110,6 +112,23 @@ impl Iterator for HtmlTokenizer {
                         return Some(HtmlToken::Eof);
                     }
                     return Some(HtmlToken::Char(c));
+                }
+                State::TagOpen => {
+                    if c == '/' {
+                        self.state = State::EndTagOpen;
+                        continue;
+                    }
+                    if c.is_ascii_alphabetic() {
+                        self.reconsume = true;
+                        self.state = State::TagName;
+                        self.create_tag(true);
+                        continue;
+                    }
+                    if self.is_eof() {
+                        return Some(HtmlToken::Eof);
+                    }
+                    self.reconsume = true;
+                    self.state = State::Data;
                 }
                 _ => {}
             }
