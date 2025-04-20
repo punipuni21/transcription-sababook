@@ -77,6 +77,16 @@ impl HtmlTokenizer {
             buf: String::new(),
         }
     }
+
+    fn is_eof(&self) -> bool {
+        self.pos < self.input.len()
+    }
+
+    fn consume_next_input(&mut self) -> char {
+        let c = self.input[self.pos];
+        self.pos += 1;
+        c
+    }
 }
 
 impl Iterator for HtmlTokenizer {
@@ -87,8 +97,20 @@ impl Iterator for HtmlTokenizer {
             return None;
         }
         loop {
+            let c = self.consume_next_input();
+
             match self.state {
-                State::Data => {}
+                State::Data => {
+                    if c == '<' {
+                        self.state = State::TagOpen;
+                        continue;
+                    }
+
+                    if self.is_eof() {
+                        return Some(HtmlToken::Eof);
+                    }
+                    return Some(HtmlToken::Char(c));
+                }
                 _ => {}
             }
         }
