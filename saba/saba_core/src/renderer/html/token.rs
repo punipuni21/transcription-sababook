@@ -88,7 +88,17 @@ impl HtmlTokenizer {
         c
     }
 
-    fn create_tag(&mut self, start_tag_token: bool) {}
+    fn create_tag(&mut self, start_tag_token: bool) {
+        if start_tag_token {
+            self.latest_token = Some(HtmlToken::StartTag {
+                tag: String::new(),
+                self_closing: false,
+                attributes: Vec::new(),
+            })
+        } else {
+            self.latest_token = Some(HtmlToken::EndTag { tag: String::new() })
+        }
+    }
 }
 
 impl Iterator for HtmlTokenizer {
