@@ -310,6 +310,16 @@ impl Iterator for HtmlTokenizer {
                     self.reconsume = true;
                     self.state = State::AttributeValueUnquoted;
                 }
+                State::AttributeValueDoubleQuoted => {
+                    if c == '"' {
+                        self.state = State::AfterAttributeValueQuoted;
+                        continue;
+                    }
+                    if self.is_eof() {
+                        return Some(HtmlToken::Eof);
+                    }
+                    self.append_attribute(c, false);
+                }
                 _ => {}
             }
         }
