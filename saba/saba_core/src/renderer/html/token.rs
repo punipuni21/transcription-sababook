@@ -407,6 +407,7 @@ impl Iterator for HtmlTokenizer {
                     self.state = State::ScriptData;
                     return Some(HtmlToken::Char('<'));
                 }
+                State::ScriptDataEndTagOpen => {}
                 _ => {}
             }
         }
