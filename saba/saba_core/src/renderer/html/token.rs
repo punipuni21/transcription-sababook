@@ -345,6 +345,25 @@ impl Iterator for HtmlTokenizer {
                     }
                     self.append_attribute(c, false);
                 }
+                State::AfterAttributeValueQuoted => {
+                    if c == ' ' {
+                        self.state = State::BeforeAttributeName;
+                        continue;
+                    }
+                    if c == '/' {
+                        self.state = State::SelfClosingStartTag;
+                        continue;
+                    }
+                    if c == '>' {
+                        self.state = State::Data;
+                        continue;
+                    }
+                    if self.is_eof() {
+                        return Some(HtmlToken::Eof);
+                    }
+                    self.reconsume = true;
+                    self.state = State::BeforeAttributeName;
+                }
                 _ => {}
             }
         }
