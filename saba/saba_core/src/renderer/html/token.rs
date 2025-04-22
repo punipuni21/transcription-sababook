@@ -1,4 +1,4 @@
-use crate::renderer::html::attribute::Attribute;
+use crate::renderer::html::attribute::{self, Attribute};
 use alloc::string::String;
 use alloc::vec::Vec;
 
@@ -105,6 +105,15 @@ impl HtmlTokenizer {
         }
     }
 
+    fn take_latest_token(&mut self) -> Option<HtmlToken> {
+        assert!(self.latest_token.is_some());
+
+        let t = self.take_latest_token().as_ref().cloned();
+        self.latest_token = None;
+        assert!(self.latest_token.is_none());
+        t
+    }
+
     fn append_tag_name(&mut self, c: char) {
         assert!(self.latest_token.is_some());
 
@@ -117,6 +126,23 @@ impl HtmlTokenizer {
                 }
                 | HtmlToken::EndTag { ref mut tag } => tag.push(c),
                 _ => panic!("`latest_token` souhd be either StartTag or EndTag"),
+            }
+        }
+    }
+
+    fn start_new_attribute(&mut self) {
+        assert!(self.latest_token.is_some());
+
+        if let Some(t) = self.latest_token.as_mut() {
+            match t {
+                HtmlToken::StartTag {
+                    tag: _,
+                    self_closing: _,
+                    ref mut attributes,
+                } => {
+                    attributes.push(Attribute::new());
+                }
+                _ => panic!("`latest_token` souhd be either StartTag"),
             }
         }
     }
@@ -196,6 +222,16 @@ impl Iterator for HtmlTokenizer {
                         return Some(HtmlToken::Eof);
                     }
                     self.append_tag_name(c);
+                }
+                State::BeforeAttributeName => {
+                    if c == '/' || c == '>' || self.is_eof() {
+                        self.reconsume = true;
+                        self.state = State::AfterAttributeName;
+                        continue;
+                    }
+                    self.reconsume = true;
+                    self.state = State::AttributeName;
+                    self.start_new_attribute();
                 }
                 _ => {}
             }
