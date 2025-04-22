@@ -397,6 +397,16 @@ impl Iterator for HtmlTokenizer {
                     if self.is_eof() {}
                     return Some(HtmlToken::Char(c));
                 }
+                State::ScriptDataLessThanSign => {
+                    if c == '/' {
+                        self.buf = String::new();
+                        self.state = State::ScriptDataEndTagOpen;
+                        continue;
+                    }
+                    self.reconsume = true;
+                    self.state = State::ScriptData;
+                    return Some(HtmlToken::Char('<'));
+                }
                 _ => {}
             }
         }
