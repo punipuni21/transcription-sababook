@@ -407,7 +407,17 @@ impl Iterator for HtmlTokenizer {
                     self.state = State::ScriptData;
                     return Some(HtmlToken::Char('<'));
                 }
-                State::ScriptDataEndTagOpen => {}
+                State::ScriptDataEndTagOpen => {
+                    if c.is_ascii_alphabetic() {
+                        self.reconsume = true;
+                        self.state = State::ScriptDataEndTagName;
+                        self.create_tag(false);
+                        continue;
+                    }
+                    self.reconsume = true;
+                    self.state = State::ScriptData;
+                    return Some(HtmlToken::Char('<'));
+                }
                 _ => {}
             }
         }
