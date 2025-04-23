@@ -79,7 +79,7 @@ impl HtmlTokenizer {
     }
 
     fn is_eof(&self) -> bool {
-        self.pos < self.input.len()
+        self.pos > self.input.len()
     }
 
     fn reconsume_input(&mut self) -> char {
@@ -466,5 +466,24 @@ mod tests {
         let html = "".to_string();
         let mut tokenizer = HtmlTokenizer::new(html);
         assert!(tokenizer.next().is_none());
+    }
+
+    #[test]
+    fn test_start_and_end_tag() {
+        let html = "<body></body>".to_string();
+        let mut tokenizer = HtmlTokenizer::new(html);
+        let expected = [
+            HtmlToken::StartTag {
+                tag: "body".to_string(),
+                self_closing: false,
+                attributes: Vec::new(),
+            },
+            HtmlToken::EndTag {
+                tag: "body".to_string(),
+            },
+        ];
+        for e in expected {
+            assert_eq!(Some(e), tokenizer.next());
+        }
     }
 }
