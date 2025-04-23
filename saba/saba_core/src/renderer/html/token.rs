@@ -455,3 +455,16 @@ impl Iterator for HtmlTokenizer {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::alloc::string::ToString;
+
+    #[test]
+    fn test_empty() {
+        let html = "".to_string();
+        let mut tokenizer = HtmlTokenizer::new(html);
+        assert!(tokenizer.next().is_none());
+    }
+}
