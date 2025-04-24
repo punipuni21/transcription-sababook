@@ -1,0 +1,62 @@
+use core::cell::RefCell;
+use alloc::rc::Weak;
+use alloc::rc::Rc;
+use alloc::string::String;
+use alloc::vec::Vec;
+
+use crate::renderer::html::attribute::Attribute;
+
+
+#[derive(Debug,Clone)]
+pub struct Node{
+  pub kind: NodeKind,
+  window:Weak<RefCell<Window>>,
+  parent: Weak<RefCell<Node>>,
+  first_child: Option<Rc<RefCell<Node>>,
+  last_child: Weak<RefCell<Node>>,
+  previous_sibling: Weak<RefCell<Node>>,
+  next_sibling: Option<Rc<RefCell<Node>>>,
+}
+
+#[derive(Debug,Clone)]
+pub struct Window{
+  document: Rc<RefCell<Node>>,
+}
+
+#[derive(Debug, Clone)]
+pub enum NodeKind {
+    /// https://dom.spec.whatwg.org/#interface-document
+    Document,
+    /// https://dom.spec.whatwg.org/#interface-element
+    Element(Element),
+    /// https://dom.spec.whatwg.org/#interface-text
+    Text(String),
+}
+
+#[derive(Debug,Clone)]
+pub struct Element{
+  kind: ElementKind,
+  attributes:Vec<Attribute>,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+/// https://dom.spec.whatwg.org/#interface-element
+pub enum ElementKind {
+    /// https://html.spec.whatwg.org/multipage/semantics.html#the-html-element
+    Html,
+    /// https://html.spec.whatwg.org/multipage/semantics.html#the-head-element
+    Head,
+    /// https://html.spec.whatwg.org/multipage/semantics.html#the-style-element
+    Style,
+    /// https://html.spec.whatwg.org/multipage/scripting.html#the-script-element
+    Script,
+    /// https://html.spec.whatwg.org/multipage/sections.html#the-body-element
+    Body,
+    /// https://html.spec.whatwg.org/multipage/grouping-content.html#the-p-element
+    P,
+    /// https://html.spec.whatwg.org/multipage/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements
+    H1,
+    H2,
+    /// https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element
+    A,
+}
