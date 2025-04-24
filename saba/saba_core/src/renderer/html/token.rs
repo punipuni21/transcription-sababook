@@ -99,16 +99,16 @@ impl HtmlTokenizer {
                 tag: String::new(),
                 self_closing: false,
                 attributes: Vec::new(),
-            })
+            });
         } else {
-            self.latest_token = Some(HtmlToken::EndTag { tag: String::new() })
+            self.latest_token = Some(HtmlToken::EndTag { tag: String::new() });
         }
     }
 
     fn take_latest_token(&mut self) -> Option<HtmlToken> {
         assert!(self.latest_token.is_some());
 
-        let t = self.take_latest_token().as_ref().cloned();
+        let t = self.latest_token.as_ref().cloned();
         self.latest_token = None;
         assert!(self.latest_token.is_none());
         t
@@ -125,7 +125,7 @@ impl HtmlTokenizer {
                     attributes: _,
                 }
                 | HtmlToken::EndTag { ref mut tag } => tag.push(c),
-                _ => panic!("`latest_token` souhd be either StartTag or EndTag"),
+                _ => panic!("`latest_token` should be either StartTag or EndTag"),
             }
         }
     }
