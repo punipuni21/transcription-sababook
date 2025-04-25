@@ -2,7 +2,6 @@ use alloc::rc::Rc;
 use alloc::rc::Weak;
 use alloc::string::String;
 use alloc::vec::Vec;
-use core::cell::Ref;
 use core::cell::RefCell;
 
 use crate::renderer::html::attribute::Attribute;
