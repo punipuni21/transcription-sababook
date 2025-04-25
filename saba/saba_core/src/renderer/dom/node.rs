@@ -75,6 +75,20 @@ impl Node {
     pub fn set_window(&mut self, window: Weak<RefCell<Window>>) {
         self.window = window;
     }
+
+    pub fn kind(&self) -> Option<Element> {
+        match self.kind {
+            NodeKind::Document | NodeKind::Text(_) => None,
+            NodeKind::Element(ref e) => Some(e.clone()),
+        }
+    }
+
+    pub fn element_kind(&self) -> Option<ElementKind> {
+        match self.kind {
+            NodeKind::Document | NodeKind::Text(_) => None,
+            NodeKind::Element(ref e) => Some(e.kind()),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -124,6 +138,10 @@ impl Element {
                 .expect("failed to convert string to ElementKind"),
             attributes,
         }
+    }
+
+    pub fn kind(&self) -> ElementKind {
+        self.kind
     }
 }
 
