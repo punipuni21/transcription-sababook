@@ -1,8 +1,10 @@
+use alloc::format;
 use alloc::rc::Rc;
 use alloc::rc::Weak;
 use alloc::string::String;
 use alloc::vec::Vec;
 use core::cell::RefCell;
+use core::str::FromStr;
 
 use crate::renderer::html::attribute::Attribute;
 
@@ -115,6 +117,16 @@ pub struct Element {
     attributes: Vec<Attribute>,
 }
 
+impl Element {
+    pub fn new(element_name: &str, attributes: Vec<Attribute>) -> Self {
+        Self {
+            kind: ElementKind::from_str(element_name)
+                .expect("failed to convert string to ElementKind"),
+            attributes,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 /// https://dom.spec.whatwg.org/#interface-element
 pub enum ElementKind {
@@ -135,4 +147,19 @@ pub enum ElementKind {
     H2,
     /// https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element
     A,
+}
+
+impl FromStr for ElementKind {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "html" => Ok(ElementKind::Html),
+            "head" => Ok(ElementKind::Head),
+            "style" => Ok(ElementKind::Style),
+            "script" => Ok(ElementKind::Script),
+            "body" => Ok(ElementKind::Body),
+            _ => Err(format!("unimplemented element name: {:?}", s)),
+        }
+    }
 }
