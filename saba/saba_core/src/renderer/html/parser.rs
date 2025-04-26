@@ -1,10 +1,11 @@
 use crate::renderer::dom::node::Node;
-use crate::renderer::dom::node::NodeKind;
 use crate::renderer::dom::node::Window;
 use crate::renderer::html::token::HtmlTokenizer;
 use alloc::rc::Rc;
 use alloc::vec::Vec;
 use core::cell::RefCell;
+
+use super::token::HtmlToken;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum InsertionMode {
@@ -39,5 +40,29 @@ impl HtmlParser {
             stack_of_open_elements: Vec::new(),
             t,
         }
+    }
+
+    pub fn construct_tree(&mut self) -> Rc<RefCell<Window>> {
+        let mut token = self.t.next();
+
+        while token.is_some() {
+            match self.mode {
+                InsertionMode::Initial => {
+                    if let Some(HtmlToken::Char(_)) = token {
+                        token = self.t.next();
+                        continue;
+                    }
+                }
+                InsertionMode::BeforeHtml => {}
+                InsertionMode::BeforeHead => {}
+                InsertionMode::InHead => {}
+                InsertionMode::AfterHead => {}
+                InsertionMode::InBody => {}
+                InsertionMode::Text => {}
+                InsertionMode::AfterBody => {}
+                InsertionMode::AfterAfterBody => {}
+            }
+        }
+        self.window.clone()
     }
 }
