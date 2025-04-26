@@ -6,6 +6,19 @@ use alloc::rc::Rc;
 use alloc::vec::Vec;
 use core::cell::RefCell;
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum InsertionMode {
+    Initial,
+    BeforeHtml,
+    BeforeHead,
+    InHead,
+    AfterHead,
+    InBody,
+    Text,
+    AfterBody,
+    AfterAfterBody,
+}
+
 #[derive(Debug, Clone)]
 pub struct HtmlParser {
     window: Rc<RefCell<Window>>,
