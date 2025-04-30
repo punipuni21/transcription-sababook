@@ -1,3 +1,4 @@
+use crate::renderer::dom::node;
 use crate::renderer::dom::node::Element;
 use crate::renderer::dom::node::ElementKind;
 use crate::renderer::dom::node::Node;
@@ -303,5 +304,35 @@ impl HtmlParser {
             Some(node) => node.clone(),
             None => window.document(),
         };
+        let node = Rc::new(RefCell::new(self.create_element(tag, attributes)));
+
+        if current.borrow().first_child().is_some() {
+            let mut last_sibling = current.borrow().first_child();
+            loop {
+                last_sibling = match last_sibling {
+                    Some(ref node) => {
+                        if node.borrow().next_sibling().is_some() {
+                            node.borrow().next_sibling()
+                        } else {
+                            break;
+                        }
+                    }
+                    None => unimplemented!("last_sibling shoube Some"),
+                }
+            }
+            last_sibling
+                .as_ref()
+                .unwrap()
+                .borrow_mut()
+                .set_next_sibling(Some(node.clone()));
+            node.borrow_mut().set_previous_sibling(Rc::downgrade(
+                &last_sibling.expect("last_sibling should be Some"),
+            ))
+        } else {
+            current.borrow_mut().set_first_child(Some(node.clone()));
+        }
+        current.borrow_mut().set_last_child(Rc::downgrade(&node));
+        node.borrow_mut().set_parent(Rc::downgrade(&current));
+        self.stack_of_open_elements.push(node);
     }
 }
