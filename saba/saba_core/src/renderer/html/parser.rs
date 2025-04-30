@@ -296,4 +296,12 @@ impl HtmlParser {
     fn create_element(&self, tag: &str, attributes: Vec<Attribute>) -> Node {
         Node::new(NodeKind::Element(Element::new(tag, attributes)))
     }
+
+    fn insert_element(&mut self, tag: &str, attributes: Vec<Attribute>) {
+        let window = self.window.borrow();
+        let current = match self.stack_of_open_elements.last() {
+            Some(node) => node.clone(),
+            None => window.document(),
+        };
+    }
 }
