@@ -272,7 +272,19 @@ impl HtmlParser {
                     }
                     self.mode = InsertionMode::InBody;
                 }
-                InsertionMode::AfterAfterBody => {}
+                InsertionMode::AfterAfterBody => {
+                    match token {
+                        Some(HtmlToken::Char(c)) => {
+                            token = self.t.next();
+                            continue;
+                        }
+                        Some(HtmlToken::Eof) | None => {
+                            return self.window.clone();
+                        }
+                        _ => {}
+                    }
+                    self.mode = InsertionMode::InBody;
+                }
             }
         }
         self.window.clone()
