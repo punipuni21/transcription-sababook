@@ -1,6 +1,7 @@
 use crate::renderer::dom::node::Element;
 use crate::renderer::dom::node::ElementKind;
 use crate::renderer::dom::node::Node;
+use crate::renderer::dom::node::NodeKind;
 use crate::renderer::dom::node::Window;
 use crate::renderer::html::token::HtmlTokenizer;
 use alloc::rc::Rc;
@@ -8,6 +9,8 @@ use alloc::vec::Vec;
 use core::cell::RefCell;
 use core::str::FromStr;
 
+use super::attribute;
+use super::attribute::Attribute;
 use super::token::HtmlToken;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -56,7 +59,7 @@ impl HtmlParser {
                         continue;
                     }
                 }
-                IInsertionMode::BeforeHtml => {
+                InsertionMode::BeforeHtml => {
                     match token {
                         Some(HtmlToken::Char(c)) => {
                             if c == ' ' || c == '\n' {
@@ -288,5 +291,9 @@ impl HtmlParser {
             }
         }
         self.window.clone()
+    }
+
+    fn create_element(&self, tag: &str, attributes: Vec<Attribute>) -> Node {
+        Node::new(NodeKind::Element(Element::new(tag, attributes)))
     }
 }
