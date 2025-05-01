@@ -347,4 +347,19 @@ impl HtmlParser {
         }
         false
     }
+
+    fn pop_until(&mut self, element_kind: ElementKind){
+      assert!(self.contain_in_stack(element_kind),"stack doesn't have an element {:?}",element_kind);
+
+      loop {
+          let current = match self.stack_of_open_elements.pop(){
+            Some(n)=>n,
+            None=>return,
+          }
+
+          if current.borrow().element_kind() == Some(element_kind){
+              return;
+          }
+      };
+    }
 }
