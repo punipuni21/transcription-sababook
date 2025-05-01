@@ -6,6 +6,7 @@ use crate::renderer::dom::node::NodeKind;
 use crate::renderer::dom::node::Window;
 use crate::renderer::html::token::HtmlTokenizer;
 use alloc::rc::Rc;
+use alloc::string::String;
 use alloc::vec::Vec;
 use core::cell::RefCell;
 use core::str::FromStr;
@@ -370,5 +371,11 @@ impl HtmlParser {
         }
       }
       false
+    }
+
+    fn crate_char(&self, c:char)->Node{
+      let mut s = String::new();
+      s.push(c);
+      Node::new(NodeKind::Text(s))
     }
 }
