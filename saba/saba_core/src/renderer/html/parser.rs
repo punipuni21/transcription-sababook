@@ -362,4 +362,13 @@ impl HtmlParser {
           }
       };
     }
+
+    fn contain_in_stack(&mut self, element_kind: ElementKind)->bool{
+      for i in 0..self.stack_of_open_elements.len(){
+        if self.stack_of_open_elements[i].borrow().element_kind() == Some(element_kind){
+          return true;
+        }
+      }
+      false
+    }
 }
