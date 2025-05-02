@@ -115,7 +115,7 @@ impl Window {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum NodeKind {
     /// https://dom.spec.whatwg.org/#interface-document
     Document,
@@ -123,6 +123,12 @@ pub enum NodeKind {
     Element(Element),
     /// https://dom.spec.whatwg.org/#interface-text
     Text(String),
+}
+
+impl PartialEq for NodeKind {
+    fn eq(&self, other: &Self) -> bool {
+        self.kind == other.kind
+    }
 }
 
 #[derive(Debug, Clone)]
