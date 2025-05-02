@@ -1,4 +1,3 @@
-use crate::renderer::dom::node;
 use crate::renderer::dom::node::Element;
 use crate::renderer::dom::node::ElementKind;
 use crate::renderer::dom::node::Node;
@@ -8,11 +7,9 @@ use crate::renderer::html::token::HtmlTokenizer;
 use alloc::rc::Rc;
 use alloc::string::String;
 use alloc::vec::Vec;
-use core::cell::Ref;
 use core::cell::RefCell;
 use core::str::FromStr;
 
-use super::attribute;
 use super::attribute::Attribute;
 use super::token::HtmlToken;
 
@@ -196,6 +193,7 @@ impl HtmlParser {
                         Some(HtmlToken::Eof) | None => {
                             return self.window.clone();
                         }
+                        _ => {}
                     }
                     self.insert_element("body", Vec::new());
                     self.mode = InsertionMode::InBody;
