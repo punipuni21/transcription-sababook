@@ -325,7 +325,7 @@ impl HtmlParser {
                 }
                 InsertionMode::AfterAfterBody => {
                     match token {
-                        Some(HtmlToken::Char(c)) => {
+                        Some(HtmlToken::Char(_c)) => {
                             token = self.t.next();
                             continue;
                         }
