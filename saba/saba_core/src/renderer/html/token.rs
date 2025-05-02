@@ -1,4 +1,4 @@
-use crate::renderer::html::attribute::{self, Attribute};
+use crate::renderer::html::attribute::Attribute;
 use alloc::string::String;
 use alloc::vec::Vec;
 
@@ -450,7 +450,6 @@ impl Iterator for HtmlTokenizer {
                     self.buf.remove(0);
                     return Some(HtmlToken::Char(c));
                 }
-                _ => {}
             }
         }
     }
