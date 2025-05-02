@@ -202,6 +202,17 @@ impl HtmlParser {
                     continue;
                 }
                 InsertionMode::InBody => match token {
+                  Some(HtmlToken::StartTag { ref tag, self_closing:_, ref attributes })=>{
+                    match tag.as_str(){
+                      "p"=>{
+                        self.insert_element(tag, attributes.to_vec());
+                        continue;
+                      }
+                      _ =>{
+                        token = self.t.next();
+                      }
+                    }
+                  }
                     Some(HtmlToken::EndTag { ref tag }) => match tag.as_str() {
                         "body" => {
                             self.mode = InsertionMode::AfterBody;
