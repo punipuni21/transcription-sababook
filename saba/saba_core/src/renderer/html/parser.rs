@@ -210,6 +210,7 @@ impl HtmlParser {
                     }) => match tag.as_str() {
                         "p" => {
                             self.insert_element(tag, attributes.to_vec());
+                            token = self.t.next();
                             continue;
                         }
                         "h1" | "h2" => {
@@ -219,6 +220,7 @@ impl HtmlParser {
                         }
                         "a" => {
                             self.insert_element(tag, attributes.to_vec());
+                            token = self.t.next();
                             continue;
                         }
                         _ => {
@@ -237,7 +239,7 @@ impl HtmlParser {
                         }
                         "html" => {
                             if self.pop_current_node(ElementKind::Body) {
-                                self.mode = InsertionMode::AfterAfterBody;
+                                self.mode = InsertionMode::AfterBody;
                                 assert!(self.pop_current_node(ElementKind::Html));
                             } else {
                                 token = self.t.next();
