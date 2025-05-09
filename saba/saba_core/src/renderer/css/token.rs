@@ -1,4 +1,4 @@
-use alloc::string::String;
+use alloc::{string::String, vec::Vec};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum CssToken {
@@ -26,4 +26,10 @@ pub enum CssToken {
     StringToken(String),
     /// https://www.w3.org/TR/css-syntax-3/#typedef-at-keyword-token
     AtKeyword(String),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct CssTokenizer {
+    pos: usize,
+    input: Vec<char>,
 }
