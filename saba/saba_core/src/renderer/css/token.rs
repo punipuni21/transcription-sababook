@@ -33,3 +33,12 @@ pub struct CssTokenizer {
     pos: usize,
     input: Vec<char>,
 }
+
+impl CssTokenizer {
+    pub fn new(css: String) -> Self {
+        Self {
+            pos: 0,
+            input: css.chars().collect(),
+        }
+    }
+}
