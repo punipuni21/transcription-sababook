@@ -41,6 +41,24 @@ impl CssTokenizer {
             input: css.chars().collect(),
         }
     }
+
+    fn consume_string_token(&mut self) -> String {
+        let mut s = String::new();
+
+        loop {
+            if self.pos >= self.input.len() {
+                return s;
+            }
+
+            self.pos += 1;
+            let c = self.input[self.pos];
+            match c {
+                '"' | '\'' => break,
+                _ => s.push(c),
+            }
+        }
+        s
+    }
 }
 
 impl Iterator for CssTokenizer {
@@ -66,6 +84,10 @@ impl Iterator for CssTokenizer {
                 ' ' | '\n' => {
                     self.pos += 1;
                     continue;
+                }
+                '"' | '\'' => {
+                    let value = self.consume_string_token();
+                    CssToken::StringToken(value)
                 }
                 _ => {
                     unimplemented!("char {} is not supported yet", c);
