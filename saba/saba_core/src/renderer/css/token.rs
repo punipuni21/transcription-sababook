@@ -138,9 +138,6 @@ impl Iterator for CssTokenizer {
                     let value = self.consume_string_token();
                     CssToken::StringToken(value)
                 }
-                _ => {
-                    unimplemented!("char {} is not supported yet", c);
-                }
                 '0'..='9' => {
                     let t = CssToken::Number(self.consume_numeric_token());
                     self.pos += 1;
@@ -174,6 +171,9 @@ impl Iterator for CssTokenizer {
                     self.pos -= 1;
                     t
                 }
+                _ => {
+                    unimplemented!("char {} is not supported yet", c);
+                }
             };
             self.pos += 1;
             return Some(token);
@@ -191,5 +191,24 @@ mod tests {
         let style = "".to_string();
         let mut t = CssTokenizer::new(style);
         assert!(t.next().is_none())
+    }
+
+    #[test]
+    fn test_one_rule() {
+        let style = "p { color: red; }".to_string();
+        let mut t = CssTokenizer::new(style);
+        let expected = [
+            CssToken::Ident("p".to_string()),
+            CssToken::OpenCurly,
+            CssToken::Ident("color".to_string()),
+            CssToken::Colon,
+            CssToken::Ident("red".to_string()),
+            CssToken::SemiColon,
+            CssToken::CloseCurly,
+        ];
+        for e in expected {
+            assert_eq!(Some(e.clone()), t.next());
+        }
+        assert!(t.next().is_none());
     }
 }
