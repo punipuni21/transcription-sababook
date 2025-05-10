@@ -140,7 +140,7 @@ impl Iterator for CssTokenizer {
                 }
                 '0'..='9' => {
                     let t = CssToken::Number(self.consume_numeric_token());
-                    self.pos += 1;
+                    self.pos -= 1;
                     t
                 }
                 '#' => {
