@@ -52,3 +52,11 @@ impl QualifiedRule {
         self.declarations = declarations;
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Selector {
+    TypeSelector(String),
+    ClassSelector(String),
+    IdSelector(String),
+    UnknownSelector,
+}
