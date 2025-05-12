@@ -4,6 +4,8 @@ use alloc::string::ToString;
 use alloc::vec::Vec;
 use core::iter::Peekable;
 
+use super::token::CssToken;
+
 #[derive(Debug, Clone)]
 pub struct CssParser {
     t: Peekable<CssTokenizer>,
@@ -71,7 +73,9 @@ impl Declaration {
     pub fn new() -> Self {
         Self {
             property: String::new(),
-            value: ComponentValue::Indent(String::new()),
+            value: ComponentValue::Ident(String::new()),
         }
     }
 }
+
+pub type ComponentValue = CssToken;
