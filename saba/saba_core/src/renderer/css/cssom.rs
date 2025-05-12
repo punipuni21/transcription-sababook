@@ -60,3 +60,18 @@ pub enum Selector {
     IdSelector(String),
     UnknownSelector,
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Declaration {
+    pub property: String,
+    pub value: ComponentValue,
+}
+
+impl Declaration {
+    pub fn new() -> Self {
+        Self {
+            property: String::new(),
+            value: ComponentValue::Indent(String::new()),
+        }
+    }
+}
