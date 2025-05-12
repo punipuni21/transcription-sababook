@@ -22,6 +22,17 @@ impl CssParser {
         sheet.set_rules(self.consume_list_of_rules());
         sheet
     }
+
+    fn consume_list_of_rules(&mut self) -> Vec<QualifiedRule> {
+        let mut rules = Vec::new();
+
+        loop {
+            let token = match self.t.peek() {
+                Some(t) => t,
+                None => return rules,
+            };
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
