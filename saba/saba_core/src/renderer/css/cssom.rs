@@ -15,6 +15,13 @@ impl CssParser {
     pub fn new(t: CssTokenizer) -> Self {
         Self { t: t.peekable() }
     }
+
+    pub fn parse_stylesheet(&mut self) -> StyleSheet {
+        let mut sheet = StyleSheet::new();
+
+        sheet.set_rules(self.consume_list_of_rules());
+        sheet
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
