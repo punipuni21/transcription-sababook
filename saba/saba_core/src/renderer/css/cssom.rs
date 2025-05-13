@@ -57,8 +57,8 @@ impl CssParser {
             };
 
             match token {
-                CssToken::CurlyOpen => {
-                    assert_eq!(self.t.next(), Some(CssToken::CurlyOpen));
+                CssToken::OpenCurly => {
+                    assert_eq!(self.t.next(), Some(CssToken::OpenCurly));
                     rule.set_declarations(self.consume_list_of_declarations());
                     return Some(rule);
                 }
@@ -70,38 +70,36 @@ impl CssParser {
     }
 
     fn consume_selector(&mut self) -> Selector {
-        loop {
-            let token = match self.t.next() {
-                Some(t) => t,
-                None => panic!("should have a token but got None"),
-            };
+        let token = match self.t.next() {
+            Some(t) => t,
+            None => panic!("should have a token but got None"),
+        };
 
-            match token {
-                CssToken::HashToken(value) => Selector::IdSelector(value[1..].to_string()),
-                CssToken::Delim(delim) => {
-                    if delim == '.' {
-                        return Selector::ClassSelector(self.consume_ident());
-                    }
-                    panic!("Parse error: {:?} is an unexpected token.", token);
+        match token {
+            CssToken::HashToken(value) => Selector::IdSelector(value[1..].to_string()),
+            CssToken::Delim(delim) => {
+                if delim == '.' {
+                    return Selector::ClassSelector(self.consume_ident());
                 }
-                CssToken::Ident(ident) => {
-                    if self.t.peek() == Some(&CssToken::Colon) {
-                        while self.t.peek() != Some(&Csstoken::CurlyOpen) {
-                            self.t.next();
-                        }
-                    }
-                    Selector::TypeSelector(ident.to_string())
-                }
-                CssToken::AtKeyword(_keyword) => {
-                    while self.t.peek() != Some(&Csstoken::CurlyOpen) {
+                panic!("Parse error: {:?} is an unexpected token.", token);
+            }
+            CssToken::Ident(ident) => {
+                if self.t.peek() == Some(&CssToken::Colon) {
+                    while self.t.peek() != Some(&CssToken::OpenCurly) {
                         self.t.next();
                     }
-                    Selector::UnknownSelector
                 }
-                _ => {
+                Selector::TypeSelector(ident.to_string())
+            }
+            CssToken::AtKeyword(_keyword) => {
+                while self.t.peek() != Some(&CssToken::OpenCurly) {
                     self.t.next();
-                    Selector::UnknownSelector
                 }
+                Selector::UnknownSelector
+            }
+            _ => {
+                self.t.next();
+                Selector::UnknownSelector
             }
         }
     }
