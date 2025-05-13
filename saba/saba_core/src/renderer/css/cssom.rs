@@ -31,6 +31,19 @@ impl CssParser {
                 Some(t) => t,
                 None => return rules,
             };
+
+            match token {
+                CssToken::AtKeyword(_keyword) => {
+                    let _rule = self.consume_qualified_rule();
+                }
+                _ => {
+                    let rule = self.consume_qualified_rule();
+                    match rule {
+                        Some(r) => rules.push(r),
+                        None => return rules,
+                    }
+                }
+            }
         }
     }
 }
