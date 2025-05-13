@@ -68,6 +68,43 @@ impl CssParser {
             }
         }
     }
+
+    fn consume_selector(&mut self) -> Selector {
+        loop {
+            let token = match self.t.next() {
+                Some(t) => t,
+                None => panic!("should have a token but got None"),
+            };
+
+            match token {
+                CssToken::HashToken(value) => Selector::IdSelector(value[1..].to_string()),
+                CssToken::Delim(delim) => {
+                    if delim == '.' {
+                        return Selector::ClassSelector(self.consume_ident());
+                    }
+                    panic!("Parse error: {:?} is an unexpected token.", token);
+                }
+                CssToken::Ident(ident) => {
+                    if self.t.peek() == Some(&CssToken::Colon) {
+                        while self.t.peek() != Some(&Csstoken::CurlyOpen) {
+                            self.t.next();
+                        }
+                    }
+                    Selector::TypeSelector(ident.to_string())
+                }
+                CssToken::AtKeyword(_keyword) => {
+                    while self.t.peek() != Some(&Csstoken::CurlyOpen) {
+                        self.t.next();
+                    }
+                    Selector::UnknownSelector
+                }
+                _ => {
+                    self.t.next();
+                    Selector::UnknownSelector
+                }
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
