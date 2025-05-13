@@ -46,6 +46,29 @@ impl CssParser {
             }
         }
     }
+
+    fn consume_qualified_rule(&mut self) ->{
+      let mut rule = QualifiedRule::new();
+
+      loop {
+        let token = match self.t.peek() {
+          Some(t) => t,
+          None => return None,
+        };
+
+        match token {
+        
+          CssToken::CurlyOpen => {
+            assert_eq!(self.t.next(), Some(CssToken::CurlyOpen));
+            rule.set_declarations(self.consume_list_of_declarations());
+            return Some(rule);
+          }
+          _ =>{
+            rule.set_selector(self.consume_selector());
+          }
+        }
+      }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
