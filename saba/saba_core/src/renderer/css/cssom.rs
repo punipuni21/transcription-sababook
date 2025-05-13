@@ -105,6 +105,35 @@ impl CssParser {
             }
         }
     }
+
+    fn consume_declaration(&mut self) -> Vec<Declaration> {
+        let mut declaration = Vec::new();
+
+        loop {
+            let token = match self.t.peek() {
+                Some(t) => t,
+                None => return declaration,
+            };
+
+            match token {
+                CssToken::CloseCurly => {
+                    assert_eq!(self.t.next(), Some(CssToken::CloseCurly));
+                    return declaration;
+                }
+                CssToken::SemiColon => {
+                    assert_eq!(self.t.next(), Some(CssToken::SemiColon));
+                }
+                CssToken::Ident(ref _ident) => {
+                    if let Some(declaration) = self.consume_declaration() {
+                        declaration.push(declaration);
+                    }
+                }
+                _ => {
+                    self.t.next();
+                }
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
