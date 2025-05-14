@@ -214,6 +214,14 @@ impl Declaration {
             value: ComponentValue::Ident(String::new()),
         }
     }
+
+    pub fn set_property(&mut self, property: String) {
+        self.property = property;
+    }
+
+    pub fn set_value(&mut self, value: ComponentValue) {
+        self.value = value;
+    }
 }
 
 pub type ComponentValue = CssToken;
