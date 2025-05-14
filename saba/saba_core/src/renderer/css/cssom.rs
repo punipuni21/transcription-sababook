@@ -112,7 +112,6 @@ impl CssParser {
                 Some(t) => t,
                 None => return declarations,
             };
-
             match token {
                 CssToken::CloseCurly => {
                     assert_eq!(self.t.next(), Some(CssToken::CloseCurly));
@@ -133,33 +132,26 @@ impl CssParser {
         }
     }
 
-    fn consume_declaration(&mut self) -> Vec<Declaration> {
-        let mut declaration = Vec::new();
-
-        loop {
-            let token = match self.t.peek() {
-                Some(t) => t,
-                None => return declaration,
-            };
-
-            match token {
-                CssToken::CloseCurly => {
-                    assert_eq!(self.t.next(), Some(CssToken::CloseCurly));
-                    return declaration;
-                }
-                CssToken::SemiColon => {
-                    assert_eq!(self.t.next(), Some(CssToken::SemiColon));
-                }
-                CssToken::Ident(ref _ident) => {
-                    if let Some(declaration) = self.consume_declaration() {
-                        declaration.push(declaration);
-                    }
-                }
-                _ => {
-                    self.t.next();
-                }
-            }
+    fn consume_declaration(&mut self) -> Option<Declaration> {
+        if self.t.peek().is_none() {
+            return None;
         }
+
+        let mut declaration = Declaration::new();
+
+        declaration.set_property(self.consume_ident());
+
+        match self.t.next() {
+            Some(token) => match token {
+                CssToken::Colon => {}
+                _ => return None,
+            },
+            None => return None,
+        }
+
+        declaration.set_value(self.consume_component_value());
+
+        Some(declaration)
     }
 }
 
