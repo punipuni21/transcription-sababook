@@ -120,7 +120,6 @@ impl CssParser {
                 }
                 CssToken::SemiColon => {
                     assert_eq!(self.t.next(), Some(CssToken::SemiColon));
-                    // 一つの宣言が終了。何もしない
                 }
                 CssToken::Ident(ref _ident) => {
                     if let Some(declaration) = self.consume_declaration() {
