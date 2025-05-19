@@ -4,6 +4,13 @@ use alloc::rc::{Rc, Weak};
 
 use crate::renderer::dom::node::Node;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LayoutObjectKind {
+    Block,
+    Inline,
+    Text,
+}
+
 #[derive(Debug, Clone)]
 pub struct LayoutObject {
     kind: LayoutObjectKind,
