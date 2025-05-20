@@ -11,15 +11,6 @@ pub enum LayoutObjectKind {
     Text,
 }
 
-impl Element {
-    pub fn is_block_element(&self) -> bool {
-        match self.kind() {
-            ElementKind::Body | ElementKind::H1 | ElementKind::H2 | ElementKind::P => true,
-            _ => false,
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct LayoutObject {
     kind: LayoutObjectKind,
