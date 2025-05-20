@@ -2,13 +2,22 @@ use core::cell::RefCell;
 
 use alloc::rc::{Rc, Weak};
 
-use crate::renderer::dom::node::{Node, NodeKind};
+use crate::renderer::dom::node::{Element, ElementKind, Node, NodeKind};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LayoutObjectKind {
     Block,
     Inline,
     Text,
+}
+
+impl Element {
+    pub fn is_block_element(&self) -> bool {
+        match self.kind() {
+            ElementKind::Body | ElementKind::H1 | ElementKind::H2 | ElementKind::P => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
