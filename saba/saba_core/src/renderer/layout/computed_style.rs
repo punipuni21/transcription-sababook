@@ -193,3 +193,10 @@ impl Color {
         u32::from_str_radix(self.code.trim_start_matches('#'), 16).unwrap()
     }
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum FontSize {
+    Medium,
+    XLarge,
+    XXLarge,
+}
