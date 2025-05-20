@@ -174,4 +174,18 @@ impl Color {
             code: code.to_string(),
         })
     }
+
+    pub fn white() -> Self {
+        Self {
+            name: Some("white".to_string()),
+            code: "#ffffff".to_string(),
+        }
+    }
+
+    pub fn black() -> Self {
+        Self {
+            name: Some("black".to_string()),
+            code: "#000000".to_string(),
+        }
+    }
 }
