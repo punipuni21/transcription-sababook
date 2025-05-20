@@ -31,7 +31,7 @@ impl ComputedStyle {
         self.background_color = Some(color);
     }
 
-    pub fn background_color(&self) -> Option<Color> {
+    pub fn background_color(&self) -> Color {
         self.background_color
             .clone()
             .expect("failed to access CSS property: background_color")
