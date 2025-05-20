@@ -1,3 +1,5 @@
+use alloc::string::String;
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComputedStyle {
     background_color: Option<Color>,
@@ -86,4 +88,10 @@ impl ComputedStyle {
     pub fn width(&self) -> f64 {
         self.width.expect("failed to access CSS property: width")
     }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Color {
+    name: Option<String>,
+    code: String,
 }
