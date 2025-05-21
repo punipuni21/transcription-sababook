@@ -31,3 +31,10 @@ impl LayoutView {
         self.root.clone()
     }
 }
+
+fn build_layout_tree(
+    node: &Option<Rc<RefCell<Node>>>,
+    parent_obj: &Option<Rc<RefCell<LayoutObject>>>,
+    cssom: &StyleSheet,
+) -> Option<Rc<RefCell<LayoutObject>>> {
+}
