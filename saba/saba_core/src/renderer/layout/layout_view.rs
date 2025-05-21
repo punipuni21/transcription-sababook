@@ -4,8 +4,10 @@ use alloc::rc::Rc;
 
 use crate::renderer::{
     css::cssom::StyleSheet,
-    dom::node::{Element, ElementKind, Node},
+    dom::node::{ElementKind, Node},
 };
+
+use super::layout_object::LayoutObject;
 
 #[derive(Debug, Clone)]
 pub struct LayoutView {
