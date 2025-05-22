@@ -2,9 +2,12 @@ use core::cell::RefCell;
 
 use alloc::rc::{Rc, Weak};
 
-use crate::renderer::dom::node::{Element, ElementKind, Node, NodeKind};
+use crate::renderer::{
+    css::cssom::StyleSheet,
+    dom::node::{Node, NodeKind},
+};
 
-use super::computed_style::DisplayType;
+use super::computed_style::{ComputedStyle, DisplayType};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LayoutObjectKind {
@@ -20,7 +23,7 @@ pub struct LayoutObject {
     first_child: Option<Rc<RefCell<LayoutObject>>>,
     next_sibling: Option<Rc<RefCell<LayoutObject>>>,
     parent: Weak<RefCell<LayoutObject>>,
-    style: ComputeStyle,
+    style: ComputedStyle,
     point: LayoutPoint,
     size: LayoutSize,
 }
