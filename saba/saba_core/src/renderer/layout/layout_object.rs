@@ -4,6 +4,8 @@ use alloc::rc::{Rc, Weak};
 
 use crate::renderer::dom::node::{Element, ElementKind, Node, NodeKind};
 
+use super::computed_style::DisplayType;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LayoutObjectKind {
     Block,
@@ -140,4 +142,38 @@ impl LayoutSize {
     pub fn set_height(&mut self, height: i64) {
         self.height = height;
     }
+}
+
+pub fn create_layout_object(
+    node: &Option<Rc<RefCell<Node>>>,
+    parent_obj: &Option<Rc<RefCell<LayoutObject>>>,
+    cssom: &StyleSheet,
+) -> Option<Rc<RefCell<LayoutObject>>> {
+    if let Some(n) = node {
+        let layout_object = Rc::new(RefCell::new(LayoutObject::new(n.clone(), parent_object)));
+
+        for rule in &cssom.rules {
+            if layout_object.borrow().is_node_selected(&rule.selector) {
+                layout_object
+                    .borrow_mut()
+                    .cascading_style(rule.declarations.clone());
+            }
+        }
+
+        let parent_style = if let Some(parent) = parent_obj {
+            Some(parent.borrow().style())
+        } else {
+            None
+        };
+
+        layout_object.borrow_mut().defaulting_style(n, parent_style);
+
+        if layout_object.borrow().style().display() == DisplayType::DisplayNone {
+            return None;
+        }
+
+        layout_object.borrow_mut().update_kind();
+        return Some(layout_object);
+    }
+    None
 }
