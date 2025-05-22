@@ -19,7 +19,7 @@ pub enum LayoutObjectKind {
 #[derive(Debug, Clone)]
 pub struct LayoutObject {
     kind: LayoutObjectKind,
-    node: Option<Rc<RefCell<Node>>>,
+    node: Rc<RefCell<Node>>,
     first_child: Option<Rc<RefCell<LayoutObject>>>,
     next_sibling: Option<Rc<RefCell<LayoutObject>>>,
     parent: Weak<RefCell<LayoutObject>>,
