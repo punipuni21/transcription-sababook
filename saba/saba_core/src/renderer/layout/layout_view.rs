@@ -38,12 +38,12 @@ fn build_layout_tree(
     cssom: &StyleSheet,
 ) -> Option<Rc<RefCell<LayoutObject>>> {
     let mut target_node = node.clone();
-    let mut layout_object = create_leyout_object(node, parent_obj, cssom);
+    let mut layout_object = create_layout_object(node, parent_obj, cssom);
 
     while layout_object.is_none() {
         if let Some(n) = target_node {
             target_node = n.borrow().next_sibling().clone();
-            layout_object = create_leyout_object(&target_node, parent_obj, cssom);
+            layout_object = create_layout_object(&target_node, parent_obj, cssom);
         } else {
             return layout_object;
         }
