@@ -71,11 +71,11 @@ impl LayoutObject {
         self.next_sibling.as_ref().cloned()
     }
 
-    pub fn parent(&mut self) -> Weak<RefCell<Self>> {
+    pub fn parent(&self) -> Weak<RefCell<Self>> {
         self.parent.clone()
     }
 
-    pub fn style(&mut self) -> ComputedStyle {
+    pub fn style(&self) -> ComputedStyle {
         self.style.clone()
     }
 
