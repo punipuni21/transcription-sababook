@@ -29,11 +29,8 @@ pub struct LayoutObject {
 }
 
 impl LayoutObject {
-    pub fn new(
-        node: Option<Rc<RefCell<Node>>>,
-        parent_object: &Option<Rc<RefCell<LayoutObject>>>,
-    ) -> Self {
-        let parent = match parent_object {
+    pub fn new(node: Rc<RefCell<Node>>, parent_obj: &Option<Rc<RefCell<LayoutObject>>>) -> Self {
+        let parent = match parent_obj {
             Some(p) => Rc::downgrade(p),
             None => Weak::new(),
         };
@@ -43,7 +40,7 @@ impl LayoutObject {
             node: node.clone(),
             first_child: None,
             next_sibling: None,
-            parent: parent,
+            parent,
             style: ComputedStyle::new(),
             point: LayoutPoint::new(0, 0),
             size: LayoutSize::new(0, 0),
