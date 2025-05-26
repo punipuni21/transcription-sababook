@@ -6,11 +6,11 @@ use alloc::{
 };
 
 use crate::renderer::{
-    css::cssom::{Selector, StyleSheet},
+    css::cssom::{ComponentValue, Declaration, Selector, StyleSheet},
     dom::node::{Node, NodeKind},
 };
 
-use super::computed_style::{ComputedStyle, DisplayType};
+use super::computed_style::{Color, ComputedStyle, DisplayType};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LayoutObjectKind {
@@ -118,6 +118,31 @@ impl LayoutObject {
                 Selector::UnknownSelector => false,
             },
             _ => false,
+        }
+    }
+
+    pub fn cascading_style(&mut self, declarations: Vec<Declaration>) {
+        for declaration in declarations {
+            match declaration.property.as_str() {
+                "background-color" => {
+                    if let ComponentValue::Ident(value) = &declaration.value {
+                        let color = match Color::from_name(&value) {
+                            Ok(color) => color,
+                            Err(_) => Color::white(),
+                        };
+                        self.style.set_background_color(color);
+                        continue;
+                    }
+                    if let ComponentValue::HashToken(color_code) = &declaration.value {
+                        let color = match Color::from_code(&color_code) {
+                            Ok(color) => color,
+                            Err(_) => Color::white(),
+                        };
+                        self.style.set_background_color(color);
+                        continue;
+                    }
+                }
+            }
         }
     }
 }
