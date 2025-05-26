@@ -1,9 +1,12 @@
-use core::cell::RefCell;
+use core::{any::type_name, cell::RefCell};
 
-use alloc::rc::{Rc, Weak};
+use alloc::{
+    rc::{Rc, Weak},
+    string::ToString,
+};
 
 use crate::renderer::{
-    css::cssom::StyleSheet,
+    css::cssom::{Selector, StyleSheet},
     dom::node::{Node, NodeKind},
 };
 
@@ -86,6 +89,37 @@ impl LayoutObject {
     pub fn size(&self) -> LayoutSize {
         self.size
     }
+
+    pub fn is_node_selected(&self, selector: &Selector) -> bool {
+        match &self.node_kind() {
+            NodeKind::Element(e) => match selector {
+                Selector::IdSelector(type_name) => {
+                    if e.kind().to_string() == *type_name {
+                        return true;
+                    }
+                    false
+                }
+                Selector::ClassSelector(class_name) => {
+                    for attr in &e.attributes() {
+                        if attr.name() == "class" && attr.value() == **class_name {
+                            return true;
+                        }
+                    }
+                    false
+                }
+                Selector::IdSelector(id_name) => {
+                    for attr in &e.attributes() {
+                        if attr.name() == "id" && attr.value() == *id_name {
+                            return true;
+                        }
+                    }
+                    false
+                }
+                Selector::UnknownSelector => false,
+            },
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -150,7 +184,7 @@ pub fn create_layout_object(
     cssom: &StyleSheet,
 ) -> Option<Rc<RefCell<LayoutObject>>> {
     if let Some(n) = node {
-        let layout_object = Rc::new(RefCell::new(LayoutObject::new(n.clone(), parent_object)));
+        let layout_object = Rc::new(RefCell::new(LayoutObject::new(n.clone(), parent_obj)));
 
         for rule in &cssom.rules {
             if layout_object.borrow().is_node_selected(&rule.selector) {
