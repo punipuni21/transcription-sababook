@@ -1,4 +1,4 @@
-use core::cell::RefCell;
+use core::cell::{Ref, RefCell};
 
 use alloc::{
     rc::{Rc, Weak},
@@ -144,6 +144,14 @@ impl LayoutObject {
                 }
             }
         }
+    }
+
+    pub fn defaulting_style(
+        &mut self,
+        node: &Rc<RefCell<Node>>,
+        parent_style: Option<ComputedStyle>,
+    ) {
+        self.style.defauling(node, parent_style);
     }
 }
 
