@@ -151,7 +151,7 @@ impl LayoutObject {
         node: &Rc<RefCell<Node>>,
         parent_style: Option<ComputedStyle>,
     ) {
-        self.style.defauling(node, parent_style);
+        self.style.defaulting(node, parent_style);
     }
 }
 
