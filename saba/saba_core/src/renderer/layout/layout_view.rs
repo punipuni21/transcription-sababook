@@ -2,9 +2,12 @@ use core::cell::RefCell;
 
 use alloc::rc::Rc;
 
-use crate::renderer::{
-    css::cssom::StyleSheet,
-    dom::node::{ElementKind, Node},
+use crate::{
+    constants::CONTENT_AREA_WIDTH,
+    renderer::{
+        css::cssom::StyleSheet,
+        dom::node::{ElementKind, Node},
+    },
 };
 
 use super::layout_object::{LayoutObject, LayoutObjectKind, LayoutPoint, LayoutSize};
