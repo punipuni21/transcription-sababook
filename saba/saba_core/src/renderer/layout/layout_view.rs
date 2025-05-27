@@ -7,7 +7,7 @@ use crate::renderer::{
     dom::node::{ElementKind, Node},
 };
 
-use super::layout_object::LayoutObject;
+use super::layout_object::{LayoutObject, LayoutObjectKind, LayoutPoint, LayoutSize};
 
 #[derive(Debug, Clone)]
 pub struct LayoutView {
@@ -29,6 +29,18 @@ impl LayoutView {
 
     pub fn root(&self) -> Option<Rc<RefCell<LayoutObject>>> {
         self.root.clone()
+    }
+
+    fn update_layout(&mut self) {
+        Self::calculate_node_size(&self.root, LayoutSize::new(CONTENT_AREA_WIDTH, 0));
+
+        Self::calculate_node_position(
+            &self.root,
+            LayoutPoint::new(0, 0),
+            LayoutObjectKind::Block,
+            None,
+            None,
+        )
     }
 }
 
