@@ -4,7 +4,7 @@ use alloc::string::ToString;
 use alloc::vec::Vec;
 use core::iter::Peekable;
 
-use super::token::{self, CssToken};
+use super::token::CssToken;
 
 #[derive(Debug, Clone)]
 pub struct CssParser {

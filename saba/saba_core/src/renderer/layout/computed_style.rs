@@ -1,7 +1,6 @@
 use core::cell::RefCell;
 
 use crate::error::Error;
-use crate::renderer::dom::node::Element;
 use crate::renderer::dom::node::ElementKind;
 use crate::renderer::dom::node::Node;
 use crate::renderer::dom::node::NodeKind;
