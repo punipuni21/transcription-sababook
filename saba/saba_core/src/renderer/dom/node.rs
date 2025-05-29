@@ -83,11 +83,8 @@ impl Node {
         self.window = window;
     }
 
-    pub fn kind(&self) -> Option<Element> {
-        match self.kind {
-            NodeKind::Document | NodeKind::Text(_) => None,
-            NodeKind::Element(ref e) => Some(e.clone()),
-        }
+    pub fn kind(&self) -> NodeKind {
+        self.kind.clone()
     }
 
     pub fn element_kind(&self) -> Option<ElementKind> {
