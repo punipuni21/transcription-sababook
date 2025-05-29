@@ -137,6 +137,7 @@ impl LayoutObject {
                         self.style.set_background_color(color);
                         continue;
                     }
+
                     if let ComponentValue::HashToken(color_code) = &declaration.value {
                         let color = match Color::from_code(&color_code) {
                             Ok(color) => color,
@@ -146,6 +147,33 @@ impl LayoutObject {
                         continue;
                     }
                 }
+                "color" => {
+                    if let ComponentValue::Ident(value) = &declaration.value {
+                        let color = match Color::from_name(&value) {
+                            Ok(color) => color,
+                            Err(_) => Color::black(),
+                        };
+                        self.style.set_color(color);
+                    }
+
+                    if let ComponentValue::HashToken(color_code) = &declaration.value {
+                        let color = match Color::from_code(&color_code) {
+                            Ok(color) => color,
+                            Err(_) => Color::black(),
+                        };
+                        self.style.set_color(color);
+                    }
+                }
+                "display" => {
+                    if let ComponentValue::Ident(value) = declaration.value {
+                        let display_type = match DisplayType::from_str(&value) {
+                            Ok(display_type) => display_type,
+                            Err(_) => DisplayType::DisplayNone,
+                        };
+                        self.style.set_display(display_type)
+                    }
+                }
+                _ => {}
             }
         }
     }
