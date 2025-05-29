@@ -249,11 +249,8 @@ pub type ComponentValue = CssToken;
 #[cfg(test)]
 mod tests {
 
-    use alloc::vec;
-
-    use crate::renderer::css;
-
     use super::*;
+    use alloc::vec;
 
     #[test]
     fn test_empty() {
