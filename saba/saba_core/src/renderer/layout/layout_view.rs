@@ -6,11 +6,16 @@ use crate::{
     constants::CONTENT_AREA_WIDTH,
     renderer::{
         css::cssom::StyleSheet,
-        dom::node::{ElementKind, Node},
+        dom::{
+            api::get_target_element_node,
+            node::{ElementKind, Node},
+        },
     },
 };
 
-use super::layout_object::{LayoutObject, LayoutObjectKind, LayoutPoint, LayoutSize};
+use super::layout_object::{
+    create_layout_object, LayoutObject, LayoutObjectKind, LayoutPoint, LayoutSize,
+};
 
 #[derive(Debug, Clone)]
 pub struct LayoutView {

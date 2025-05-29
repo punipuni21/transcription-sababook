@@ -1,6 +1,6 @@
 use core::cell::RefCell;
 
-use alloc::{rc::Rc, vec::Vec};
+use alloc::{rc::Rc, string::ToString, vec::Vec};
 
 use super::node::{Element, ElementKind, Node, NodeKind};
 
