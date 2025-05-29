@@ -177,7 +177,7 @@ impl CssParser {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct StyleSheet {
-    rules: Vec<QualifiedRule>,
+    pub rules: Vec<QualifiedRule>,
 }
 
 impl StyleSheet {
