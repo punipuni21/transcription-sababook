@@ -97,7 +97,7 @@ impl LayoutObject {
     pub fn is_node_selected(&self, selector: &Selector) -> bool {
         match &self.node_kind() {
             NodeKind::Element(e) => match selector {
-                Selector::IdSelector(type_name) => {
+                Selector::TypeSelector(type_name) => {
                     if e.kind().to_string() == *type_name {
                         return true;
                     }
