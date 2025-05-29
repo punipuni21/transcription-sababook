@@ -6,7 +6,7 @@ use alloc::{
 };
 
 use crate::{
-    constants::{CHAR_WIDTH, CONTENT_AREA_WIDTH},
+    constants::{CHAR_HEIGHT_WITH_PADDING, CHAR_WIDTH, CONTENT_AREA_WIDTH},
     renderer::{
         css::cssom::{ComponentValue, Declaration, Selector, StyleSheet},
         dom::node::{Node, NodeKind},
@@ -227,12 +227,22 @@ impl LayoutObject {
                     };
 
                     let width = CHAR_WIDTH * ratio * t.len() as i64;
-                    if width < CONTENT_AREA_WIDTH {
+                    if width > CONTENT_AREA_WIDTH {
                         size.set_width(CONTENT_AREA_WIDTH);
+                        let line_num = if width.wrapping_rem(CONTENT_AREA_WIDTH) == 0 {
+                            width.wrapping_div(CHAR_WIDTH)
+                        } else {
+                            width.wrapping_div(CHAR_WIDTH) + 1
+                        };
+                        size.set_height(CHAR_HEIGHT_WITH_PADDING * ratio * line_num);
+                    } else {
+                        size.set_width(width);
+                        size.set_height(CHAR_HEIGHT_WITH_PADDING * ratio);
                     }
                 }
             }
         }
+        self.size = size;
     }
 }
 
