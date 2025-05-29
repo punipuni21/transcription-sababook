@@ -310,7 +310,7 @@ impl LayoutObject {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Copy)]
 pub struct LayoutPoint {
     x: i64,
     y: i64,
