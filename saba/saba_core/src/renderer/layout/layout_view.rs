@@ -178,7 +178,7 @@ fn build_layout_tree(
 
 #[cfg(test)]
 mod tests {
-    use alloc::string::String;
+    use alloc::string::{String, ToString};
 
     use super::*;
     use crate::renderer::css::cssom::CssParser;
@@ -195,5 +195,11 @@ mod tests {
         let css_tokenizer = CssTokenizer::new(style);
         let cssom = CssParser::new(css_tokenizer).parse_stylesheet();
         LayoutView::new(dom, &cssom)
+    }
+
+    #[test]
+    fn test_body() {
+        let layout_view = create_layout_view("".to_string());
+        assert_eq!(None, layout_view.root());
     }
 }
