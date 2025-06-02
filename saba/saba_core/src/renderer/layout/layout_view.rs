@@ -181,9 +181,9 @@ mod tests {
     use alloc::string::String;
 
     use super::*;
-    use crate::alloc::string::ToString;
     use crate::renderer::css::cssom::CssParser;
     use crate::renderer::css::token::CssTokenizer;
+    use crate::renderer::dom::api::get_style_sheet;
     use crate::renderer::html::parser::HtmlParser;
     use crate::renderer::html::token::HtmlTokenizer;
 
