@@ -184,17 +184,16 @@ mod tests {
     use super::*;
     use crate::renderer::css::cssom::CssParser;
     use crate::renderer::css::token::CssTokenizer;
-    use crate::renderer::dom::api::get_style_sheet;
+    use crate::renderer::dom::api::get_style_content;
     use crate::renderer::dom::node::{Element, NodeKind};
     use crate::renderer::html::parser::HtmlParser;
     use crate::renderer::html::token::HtmlTokenizer;
-    use crate::renderer::layout;
 
     fn create_layout_view(html: String) -> LayoutView {
         let t = HtmlTokenizer::new(html);
         let window = HtmlParser::new(t).construct_tree();
         let dom = window.borrow().document();
-        let style = get_style_sheet(dom.clone());
+        let style = get_style_content(dom.clone());
         let css_tokenizer = CssTokenizer::new(style);
         let cssom = CssParser::new(css_tokenizer).parse_stylesheet();
         LayoutView::new(dom, &cssom)

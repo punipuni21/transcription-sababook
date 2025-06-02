@@ -34,7 +34,7 @@ pub fn get_target_element_node(
     }
 }
 
-pub fn get_style_sheet(root: Rc<RefCell<Node>>) -> String {
+pub fn get_style_content(root: Rc<RefCell<Node>>) -> String {
     let style_node = match get_target_element_node(Some(root), ElementKind::Style) {
         Some(node) => node,
         None => return "".to_string(),
