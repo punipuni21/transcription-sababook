@@ -3,14 +3,18 @@ use core::cell::RefCell;
 use alloc::{
     rc::{Rc, Weak},
     string::{String, ToString},
+    vec::Vec,
 };
 
 use crate::{
     browser::Browser,
+    display_item::DisplayItem,
     http::HttpResponse,
     renderer::{
+        css::cssom::StyleSheet,
         dom::node::Window,
         html::{parser::HtmlParser, token::HtmlTokenizer},
+        layout::layout_view::LayoutView,
     },
 };
 
@@ -18,6 +22,9 @@ use crate::{
 pub struct Page {
     browser: Weak<RefCell<Browser>>,
     frame: Option<Rc<RefCell<Window>>>,
+    style: Option<StyleSheet>,
+    layout_view: Option<LayoutView>,
+    display_items: Vec<DisplayItem>,
 }
 
 impl Page {
@@ -25,6 +32,9 @@ impl Page {
         Self {
             browser: Weak::new(),
             frame: None,
+            style: None,
+            layout_view: None,
+            display_items: Vec::new(),
         }
     }
 
