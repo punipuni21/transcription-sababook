@@ -4,6 +4,7 @@ use alloc::{rc::Rc, vec::Vec};
 
 use crate::{
     constants::CONTENT_AREA_WIDTH,
+    display_item::{self, DisplayItem},
     renderer::{
         css::cssom::StyleSheet,
         dom::{
@@ -115,6 +116,12 @@ impl LayoutView {
             }
             None => (),
         }
+    }
+
+    pub fn paint(&self) -> Vec<DisplayItem> {
+        let mut display_items = Vec::new();
+        Self::paint_node(&self.root, &mut display_items);
+        display_items
     }
 }
 
