@@ -3,6 +3,8 @@ use crate::constants::CHAR_HEIGHT_WITH_PADDING;
 use crate::constants::CHAR_WIDTH;
 use crate::constants::CONTENT_AREA_WIDTH;
 
+use crate::constants::WINDOW_PADDING;
+use crate::constants::WINDOW_WIDTH;
 use crate::display_item::DisplayItem;
 use crate::renderer::css::cssom::ComponentValue;
 use crate::renderer::css::cssom::Declaration;
@@ -474,5 +476,16 @@ fn find_index_for_line_break(line: String, max_index: usize) -> usize {
 }
 
 fn split_text(line: String, char_width: i64) -> Vec<String> {
-    String::new();
+    let mut result: Vec<String> = vec![];
+    if line.len() as i64 * char_width < (WINDOW_WIDTH + WINDOW_PADDING) {
+        let s = line.split_at(find_index_for_line_break(
+            line.clone(),
+            ((WINDOW_WIDTH + WINDOW_PADDING) / char_width) as usize,
+        ));
+        result.push(s.0.to_string());
+        result.extend(split_text(s.1.trim().to_string(), char_width));
+    } else {
+        result.push(line);
+    }
+    result
 }
