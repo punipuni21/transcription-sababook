@@ -17,6 +17,7 @@ use crate::renderer::layout::computed_style::FontSize;
 use alloc::rc::Rc;
 use alloc::rc::Weak;
 
+use alloc::string::String;
 use alloc::vec;
 use alloc::vec::Vec;
 use core::cell::RefCell;
@@ -461,4 +462,17 @@ impl PartialEq for LayoutObject {
     fn eq(&self, other: &Self) -> bool {
         self.kind == other.kind
     }
+}
+
+fn find_index_for_line_break(line: String, max_index: usize) -> usize {
+    for i in (0..max_index).rev() {
+        if line.chars().collect::<Vec<char>>()[i] == ' ' {
+            return i;
+        }
+    }
+    max_index
+}
+
+fn split_text(line: String, char_width: i64) -> Vec<String> {
+    String::new();
 }
