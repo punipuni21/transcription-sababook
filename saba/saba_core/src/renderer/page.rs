@@ -5,7 +5,14 @@ use alloc::{
     string::{String, ToString},
 };
 
-use crate::{browser::Browser, http::HttpResponse, renderer::dom::node::Window};
+use crate::{
+    browser::Browser,
+    http::HttpResponse,
+    renderer::{
+        dom::node::Window,
+        html::{parser::HtmlParser, token::HtmlTokenizer},
+    },
+};
 
 #[derive(Debug, Clone)]
 pub struct Page {
@@ -26,7 +33,7 @@ impl Page {
     }
 
     pub fn receive_response(&mut self, response: HttpResponse) -> String {
-        self.create_frame(response);
+        self.create_frame(response.body());
 
         if let Some(frame) = &self.frame {
             let dom = frame.borrow().document().clone();
@@ -35,5 +42,11 @@ impl Page {
         }
 
         "".to_string()
+    }
+
+    fn create_frame(&mut self, html: String) {
+        let html_tokenizer = HtmlTokenizer::new(html);
+        let frame = HtmlParser::new(html_tokenizer).construct_tree();
+        self.frame = Some(frame);
     }
 }
