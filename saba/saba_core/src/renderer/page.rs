@@ -1,8 +1,11 @@
 use core::cell::RefCell;
 
-use alloc::rc::{Rc, Weak};
+use alloc::{
+    rc::{Rc, Weak},
+    string::{String, ToString},
+};
 
-use crate::{browser::Browser, renderer::dom::node::Window};
+use crate::{browser::Browser, http::HttpResponse, renderer::dom::node::Window};
 
 #[derive(Debug, Clone)]
 pub struct Page {
@@ -20,5 +23,17 @@ impl Page {
 
     pub fn set_browser(&mut self, browser: Weak<RefCell<Browser>>) {
         self.browser = browser;
+    }
+
+    pub fn receive_response(&mut self, response: HttpResponse) -> String {
+        self.create_frame(response);
+
+        if let Some(frame) = &self.frame {
+            let dom = frame.borrow().document().clone();
+            let debug = convert_dom_to_string(&Some(dom));
+            return debug;
+        }
+
+        "".to_string()
     }
 }
