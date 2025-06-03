@@ -1,20 +1,25 @@
+use crate::alloc::string::ToString;
+use crate::constants::CHAR_HEIGHT_WITH_PADDING;
+use crate::constants::CHAR_WIDTH;
+use crate::constants::CONTENT_AREA_WIDTH;
+
+use crate::display_item::DisplayItem;
+use crate::renderer::css::cssom::ComponentValue;
+use crate::renderer::css::cssom::Declaration;
+use crate::renderer::css::cssom::Selector;
+use crate::renderer::css::cssom::StyleSheet;
+use crate::renderer::dom::node::Node;
+use crate::renderer::dom::node::NodeKind;
+use crate::renderer::layout::computed_style::Color;
+use crate::renderer::layout::computed_style::ComputedStyle;
+use crate::renderer::layout::computed_style::DisplayType;
+use crate::renderer::layout::computed_style::FontSize;
+use alloc::rc::Rc;
+use alloc::rc::Weak;
+
+use alloc::vec;
+use alloc::vec::Vec;
 use core::cell::RefCell;
-
-use alloc::{
-    rc::{Rc, Weak},
-    string::ToString,
-    vec::Vec,
-};
-
-use crate::{
-    constants::{CHAR_HEIGHT_WITH_PADDING, CHAR_WIDTH, CONTENT_AREA_WIDTH},
-    renderer::{
-        css::cssom::{ComponentValue, Declaration, Selector, StyleSheet},
-        dom::node::{Node, NodeKind},
-    },
-};
-
-use super::computed_style::{Color, ComputedStyle, DisplayType, FontSize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LayoutObjectKind {
@@ -307,6 +312,58 @@ impl LayoutObject {
             }
         }
         self.point = point;
+    }
+
+    pub fn paint(&mut self) -> Vec<DisplayItem> {
+        if self.style.display() == DisplayType::DisplayNone {
+            return vec![];
+        }
+
+        match self.kind {
+            LayoutObjectKind::Block => {
+                if let NodeKind::Element(_e) = self.node_kind() {
+                    return vec![DisplayItem::Rect {
+                        style: self.style(),
+                        layout_point: self.point(),
+                        layout_size: self.size(),
+                    }];
+                }
+            }
+            LayoutObjectKind::Inline => {}
+            LayoutObjectKind::Text => {
+                if let NodeKind::Text(t) = self.node_kind() {
+                    let mut v = vec![];
+                    let ratio = match self.style.font_size() {
+                        FontSize::Medium => 1,
+                        FontSize::XLarge => 2,
+                        FontSize::XXLarge => 3,
+                    };
+                    let paint_text = t
+                        .replace("\n", " ")
+                        .split(' ')
+                        .filter(|s| !s.is_empty())
+                        .collect::<Vec<_>>()
+                        .join(" ");
+
+                    let lines = split_text(paint_text, CHAR_WIDTH * ratio);
+                    let mut i = 0;
+                    for line in lines {
+                        let item = DisplayItem::Text {
+                            text: line,
+                            style: self.style(),
+                            layout_point: LayoutPoint {
+                                x: self.point().x(),
+                                y: self.point().y() + CHAR_HEIGHT_WITH_PADDING * i,
+                            },
+                        };
+                        v.push(item);
+                        i += 1;
+                    }
+                    return v;
+                }
+            }
+        }
+        vec![]
     }
 }
 
