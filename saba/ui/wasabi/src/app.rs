@@ -82,4 +82,8 @@ impl WasabiUI {
         self.run_app()?;
         Ok(())
     }
+
+    fn run_app(&mut self) -> Result<(), Error> {
+        Ok(())
+    }
 }
