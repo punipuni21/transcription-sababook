@@ -3,6 +3,7 @@ use core::cell::RefCell;
 use alloc::format;
 use alloc::{rc::Rc, string::ToString};
 use noli::error::Result as OsResult;
+use noli::println;
 use noli::window::{StringSize, Window};
 use saba_core::error::Error;
 use saba_core::{
@@ -84,6 +85,19 @@ impl WasabiUI {
     }
 
     fn run_app(&mut self) -> Result<(), Error> {
+        loop {
+            self.handle_mouse_input()?;
+        }
+    }
+
+    fn handle_mouse_input(&mut self) -> Result<(), Error> {
+        if let Some(MouseEvent {
+            button: _button,
+            position,
+        }) = Api::get_mouse_cursor_info()
+        {
+            println!("mouse position {:?}", position);
+        }
         Ok(())
     }
 }
