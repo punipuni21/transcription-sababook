@@ -1,8 +1,10 @@
 use core::cell::RefCell;
 
+use alloc::format;
 use alloc::{rc::Rc, string::ToString};
 use noli::error::Result as OsResult;
 use noli::window::{StringSize, Window};
+use saba_core::error::Error;
 use saba_core::{
     browser::Browser,
     constants::{
@@ -61,6 +63,17 @@ impl WasabiUI {
         self.window.draw_line(BLACK, 71, 3, WINDOW_WIDTH - 5, 3)?;
         self.window
             .draw_line(GREY, 71, 3, 71, 1 + ADDRESSBAR_HEIGHT)?;
+        Ok(())
+    }
+
+    fn setup(&mut self) -> Result<(), Error> {
+        if let Err(error) = self.setup_toolbar() {
+            return Err(Error::InvalidUI(format!(
+                "failed to initialize a toolbar with error: {:#?}",
+                error
+            )));
+        }
+        self.window.flush();
         Ok(())
     }
 }
