@@ -76,4 +76,10 @@ impl WasabiUI {
         self.window.flush();
         Ok(())
     }
+
+    pub fn start(&mut self) -> Result<(), Error> {
+        self.setup()?;
+        self.run_app()?;
+        Ok(())
+    }
 }
