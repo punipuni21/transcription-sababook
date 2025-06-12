@@ -2,7 +2,7 @@ use core::cell::RefCell;
 
 use alloc::{
     rc::{Rc, Weak},
-    string::{String, ToString},
+    string::String,
     vec::Vec,
 };
 

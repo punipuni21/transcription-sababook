@@ -4,7 +4,7 @@ use alloc::{rc::Rc, vec::Vec};
 
 use crate::{
     constants::CONTENT_AREA_WIDTH,
-    display_item::{self, DisplayItem},
+    display_item::DisplayItem,
     renderer::{
         css::cssom::StyleSheet,
         dom::{

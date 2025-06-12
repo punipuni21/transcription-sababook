@@ -6,7 +6,7 @@ use alloc::{
     vec::Vec,
 };
 
-use super::node::{self, Element, ElementKind, Node, NodeKind};
+use super::node::{Element, ElementKind, Node, NodeKind};
 
 pub fn get_target_element_node(
     node: Option<Rc<RefCell<Node>>>,
